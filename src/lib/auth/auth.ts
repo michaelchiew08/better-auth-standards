@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth"
+import { betterAuth, User } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { db } from "@/drizzle/db"
 import { nextCookies } from "better-auth/next-js"
@@ -8,7 +8,7 @@ import { createAuthMiddleware } from "better-auth/api"
 import { sendWelcomeEmail } from "../emails/welcome-email"
 import { sendDeleteAccountVerificationEmail } from "../emails/delete-account-verification"
 import { twoFactor } from "better-auth/plugins/two-factor"
-import { passkey } from "better-auth/passkey"
+import { passkey } from "@better-auth/passkey"
 import { admin as adminPlugin } from "better-auth/plugins/admin"
 import { organization } from "better-auth/plugins/organization"
 import { ac, admin, user } from "@/components/auth/permissions"
@@ -30,7 +30,7 @@ export const auth = betterAuth({
   user: {
     changeEmail: {
       enabled: true,
-      sendChangeEmailVerification: async ({ user, url, newEmail }) => {
+      sendChangeEmailVerification: async ({ user, url, newEmail }: { user: User, url: string, newEmail: string }) => {
         await sendEmailVerificationEmail({
           user: { ...user, email: newEmail },
           url,
